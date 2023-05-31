@@ -12,7 +12,7 @@ import pochemon.auth.service.AuthService;
 import pochemon.dto.AuthDTO;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
     private final AuthService authService;
 

@@ -1,5 +1,6 @@
 package pochemon.auth.controller;
 
+import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,11 @@ public class AuthController {
             // Les informations d'identification sont incorrectes
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Identifiants invalides");
         }
+    }
+
+    @PostMapping("/verify")
+    public boolean validateToken(String token) {
+        return authService.validateToken(token);
     }
 
 }

@@ -21,6 +21,11 @@ public class AuthController {
         this.authService = authService;
     }
 
+    @PostMapping("/register")
+    public boolean addLogin(@RequestBody AuthDTO loginRequest) {
+        return authService.addLogin(loginRequest.getUsername(), loginRequest.getPassword());
+    }
+
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody AuthDTO loginRequest) {
         // Vérifier les informations d'identification de l'utilisateur

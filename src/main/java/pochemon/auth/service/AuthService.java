@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import pochemon.auth.entity.Login;
 import pochemon.auth.repository.LoginRepository;
 import pochemon.auth.util.JwtUtil;
+import pochemon.dto.AuthDTO;
 import pochemon.service.UserWebService;
 
 import java.util.Optional;
@@ -53,5 +54,10 @@ public class AuthService {
 
     public boolean validateToken(String token) {
         return jwtUtil.validateToken(token);
+    }
+
+    public boolean addLogin(String username, String password) {
+        loginRepository.save(new Login(username, password));
+        return true;
     }
 }

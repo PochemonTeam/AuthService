@@ -54,20 +54,27 @@ public class AuthService {
 
 	public boolean authenticate(String username, String password) {
 		
-		//On log la tentative de connexion avec RCP
-		Info request = Info.newBuilder().setDate(LocalDateTime.now().toString()).setUsername(username).build();
-		// Dans notre système on ne faire rien de spécial si l'authentification n'a pas
-		// été logged
-		Saved response = stub.logAuth(request);
-		@SuppressWarnings("unused")
-		boolean validation = response.getValidation();
-		
 		// Rechercher l'utilisateur dans la base de données
 		Optional<Login> optionalLogin = loginRepository.findLoginByUsername(username);
 		if (optionalLogin.isPresent()) {
 			Login login = optionalLogin.get();
 			// Vérifier le mot de passe en utilisant le PasswordEncoder
-			return passwordEncoder.matches(password, login.getPassword());
+			Boolean exists = passwordEncoder.matches(password, login.getPassword());
+			
+			Info request = null;
+			if (exists) {
+				//On log la tentative de connexion avec RCP
+				request = Info.newBuilder().setDate(LocalDateTime.now().toString()).setUsername(username).setSuccess(true).build();
+			} else {
+				request = Info.newBuilder().setDate(LocalDateTime.now().toString()).setUsername(username).setSuccess(false).build();
+			}
+			// Dans notre système on ne faire rien de spécial si l'authentification n'a pas
+			// été logged
+			Saved response = stub.logAuth(request);
+			@SuppressWarnings("unused")
+			boolean validation = response.getValidation();
+			
+			return exists;
 		}
 		return false;
 	}

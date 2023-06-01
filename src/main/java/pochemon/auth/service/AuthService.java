@@ -11,6 +11,7 @@ import io.grpc.ManagedChannelBuilder;
 import pochemon.auth.entity.Login;
 import pochemon.auth.repository.LoginRepository;
 import pochemon.auth.util.JwtUtil;
+import pochemon.dto.AuthDTO;
 import pochemon.log.Info;
 import pochemon.log.LogServiceGrpc;
 import pochemon.log.Saved;
@@ -90,4 +91,9 @@ public class AuthService {
 	public boolean validateToken(String token) {
 		return jwtUtil.validateToken(token);
 	}
+
+    public boolean addLogin(String username, String password) {
+        loginRepository.save(new Login(username, password));
+        return true;
+    }
 }

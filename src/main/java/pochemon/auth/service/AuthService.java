@@ -1,6 +1,7 @@
 package pochemon.auth.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,13 @@ import java.util.Optional;
 
 @Service
 public class AuthService {
+	
+	@Value("${rpc.host}")
+    private String rpcUrl;
+	
+	@Value("${rpc.port}")
+    private String rpcPort;
+	
 	private final JwtUtil jwtUtil;
 
 	private final LoginRepository loginRepository;
@@ -34,7 +42,7 @@ public class AuthService {
 
 	@Autowired
 	public AuthService(JwtUtil jwtUtil, LoginRepository loginRepository) {
-		this.channel = ManagedChannelBuilder.forAddress("localhost", 8080).usePlaintext().build();
+		this.channel = ManagedChannelBuilder.forAddress(this.rpcUrl, Integer.parseInt(this.rpcPort)).usePlaintext().build();
 		this.jwtUtil = jwtUtil;
 		this.loginRepository = loginRepository;
 		this.passwordEncoder = new BCryptPasswordEncoder();

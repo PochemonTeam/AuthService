@@ -1,5 +1,8 @@
 package pochemon.auth.service;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,14 +14,10 @@ import io.grpc.ManagedChannelBuilder;
 import pochemon.auth.entity.Login;
 import pochemon.auth.repository.LoginRepository;
 import pochemon.auth.util.JwtUtil;
-import pochemon.dto.AuthDTO;
 import pochemon.log.Info;
 import pochemon.log.LogServiceGrpc;
 import pochemon.log.Saved;
 import pochemon.service.UserWebService;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 public class AuthService {
@@ -35,8 +34,6 @@ public class AuthService {
 
 	private final PasswordEncoder passwordEncoder;
 
-	private final UserWebService userWebService;
-
 	private ManagedChannel channel;
 
 	private LogServiceGrpc.LogServiceBlockingStub stub;
@@ -47,7 +44,6 @@ public class AuthService {
 		this.jwtUtil = jwtUtil;
 		this.loginRepository = loginRepository;
 		this.passwordEncoder = new BCryptPasswordEncoder();
-		this.userWebService = new UserWebService();
 		this.stub = LogServiceGrpc.newBlockingStub(channel);
 	}
 
@@ -56,6 +52,7 @@ public class AuthService {
 	}
 
 	// Méthode de validation d'authentification fictive
+	@SuppressWarnings("unused")
 	private boolean fakeAuthenticate(String username, String password) {
 		// méthode temporaire pour valider une connexion
 		return "admin".equals(username) && "password".equals(password);

@@ -6,6 +6,14 @@ WORKDIR /PochemonLib
 COPY ./PochemonLib/pom.xml ./pom.xml
 COPY ./PochemonLib/src ./src
 
+RUN mvn clean install
+
+WORKDIR /RPCLib
+
+# Copy your DTO project
+COPY ./RPCLib/pom.xml ./pom.xml
+COPY ./RPCLib/src ./src
+
 # Build the DTO project and install it into the local maven repository
 RUN mvn clean install
 

@@ -1,6 +1,5 @@
 package pochemon.auth.service;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,14 +9,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
 import pochemon.auth.entity.Login;
 import pochemon.auth.repository.LoginRepository;
 import pochemon.auth.util.JwtUtil;
-import pochemon.log.Info;
 import pochemon.log.LogServiceGrpc;
-import pochemon.log.Saved;
-import pochemon.service.UserWebService;
 
 @Service
 public class AuthService {
@@ -40,11 +35,11 @@ public class AuthService {
 
 	@Autowired
 	public AuthService(JwtUtil jwtUtil, LoginRepository loginRepository) {
-		this.channel = ManagedChannelBuilder.forAddress(this.rpcUrl, Integer.parseInt(this.rpcPort)).usePlaintext().build();
+		//this.channel = ManagedChannelBuilder.forAddress(this.rpcUrl, Integer.parseInt(this.rpcPort)).usePlaintext().build();
 		this.jwtUtil = jwtUtil;
 		this.loginRepository = loginRepository;
 		this.passwordEncoder = new BCryptPasswordEncoder();
-		this.stub = LogServiceGrpc.newBlockingStub(channel);
+		//this.stub = LogServiceGrpc.newBlockingStub(channel);
 	}
 
 	public String generateToken(String username) {
@@ -67,18 +62,18 @@ public class AuthService {
 			// Vérifier le mot de passe en utilisant le PasswordEncoder
 			Boolean exists = passwordEncoder.matches(password, login.getPassword());
 			
-			Info request = null;
-			if (exists) {
-				//On log la tentative de connexion avec RCP
-				request = Info.newBuilder().setDate(LocalDateTime.now().toString()).setUsername(username).setSuccess(true).build();
-			} else {
-				request = Info.newBuilder().setDate(LocalDateTime.now().toString()).setUsername(username).setSuccess(false).build();
-			}
-			// Dans notre système on ne faire rien de spécial si l'authentification n'a pas
-			// été logged
-			Saved response = stub.logAuth(request);
-			@SuppressWarnings("unused")
-			boolean validation = response.getValidation();
+//			Info request = null;
+//			if (exists) {
+//				//On log la tentative de connexion avec RCP
+//				request = Info.newBuilder().setDate(LocalDateTime.now().toString()).setUsername(username).setSuccess(true).build();
+//			} else {
+//				request = Info.newBuilder().setDate(LocalDateTime.now().toString()).setUsername(username).setSuccess(false).build();
+//			}
+//			// Dans notre système on ne faire rien de spécial si l'authentification n'a pas
+//			// été logged
+//			Saved response = stub.logAuth(request);
+//			@SuppressWarnings("unused")
+//			boolean validation = response.getValidation();
 			
 			return exists;
 		}
